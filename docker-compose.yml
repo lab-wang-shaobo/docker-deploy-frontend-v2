@@ -2,7 +2,7 @@ services:
 
   frontend:
 
-    image: wangshaobo0904-hub/234-deploylab-frontend:latest
+    image: geicold/234-deploylab-frontend:latest
 
     pull_policy: always
 
