@@ -1,0 +1,37 @@
+name: Deploy Frontend
+on:
+  push:
+    branches: [ new-grade-rule ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 拉取代码
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      # 2. 登录Docker Hub
+      - name: Login Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      # 3. 构建推送前端镜像
+      - name: Build & Push Frontend Image
+        run: |
+          docker build -t getcold/234-deploylab-frontend:latest .
+          docker push getcold/234-deploylab-frontend:latest
+
+      # 4. SSH连接EC2重启前端容器
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_SERVER }}
+          username: ${{ secrets.HOST_USER_NAME }}
+          key: ${{ secrets.HOST_SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/ubuntu
+            docker-compose pull frontend
+            docker-compose up -d --force-recreate frontend
