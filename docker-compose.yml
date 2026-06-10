@@ -1,13 +1,7 @@
 services:
-
   frontend:
-
-    image: geicold/234-deploylab-frontend:latest
-
+    image: getcold/234-deploylab-frontend:latest
     pull_policy: always
-
     ports:
-
-      - "8081:80"
-
+      - "8081:8080"
     restart: unless-stopped
