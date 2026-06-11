@@ -45,7 +45,7 @@ export function useGrade() {
       if (isFirstLoad) {
         // First call uses load()
         const loadResult = await load(GET_GRADE_FROM_SCORE, { score })
-        result = loadResult ? (loadResult as any).data ?? loadResult : null
+        result = loadResult as any
         isFirstLoad = false
       } else {
         // Subsequent calls use refetch()
